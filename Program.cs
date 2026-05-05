@@ -16,8 +16,16 @@ class Program
 
     static async Task Main()
     {
+        string? endpoint = Environment.GetEnvironmentVariable("AI_PROJECT_ENDPOINT");
+        if (string.IsNullOrWhiteSpace(endpoint))
+        {
+            Console.WriteLine("Missing AI_PROJECT_ENDPOINT. Example:");
+            Console.WriteLine("AI_PROJECT_ENDPOINT=\"https://<resource>.services.ai.azure.com/api/projects/<project>\"");
+            return;
+        }
+
         var client = new AIProjectClient(
-            new Uri("https://pankajmaftest.services.ai.azure.com/api/projects/proj-default"),
+            new Uri(endpoint),
             new AzureCliCredential());
 
         AIAgent defensiveAgent = client.AsAIAgent(
